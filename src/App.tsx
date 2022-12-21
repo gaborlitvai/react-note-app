@@ -70,13 +70,31 @@ function App() {
   }
 
   function onDeleteNote(id: string) {
-    setNotes(prevNotes=> {
-      return prevNotes.filter(note => note.id !== id)
-    })
+    setNotes((prevNotes) => {
+      return prevNotes.filter((note) => note.id !== id);
+    });
   }
 
   function addTag(tag: Tag) {
     setTags((prev) => [...prev, tag]);
+  }
+
+  function updateTag(id: string, label: string) {
+    setTags((prevTags) => {
+      return prevTags.map((tag) => {
+        if (tag.id === id) {
+          return { ...tag, label };
+        } else {
+          return tag;
+        }
+      });
+    });
+  }
+
+  function deleteTag(id: string) {
+    setTags((prevTags) => {
+      return prevTags.filter((tag) => tag.id !== id);
+    });
   }
 
   return (
@@ -84,7 +102,14 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<NoteList availableTags={tags} notes={notesWithTags} />}
+          element={
+            <NoteList
+              availableTags={tags}
+              notes={notesWithTags}
+              onUpdateTag={updateTag}
+              onDeleteTag={deleteTag}
+            />
+          }
         />
         <Route
           path="/new"
